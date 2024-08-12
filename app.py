@@ -6,7 +6,7 @@ from operator import itemgetter
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 
-from langchain_chroma import Chroma
+
 from langchain.retrievers import ParentDocumentRetriever
 from langchain_community.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 
@@ -59,22 +59,9 @@ pc = Pinecone(api_key=st.secrets["pinecone_api_key"])
 index_name = "arxiv-papers-md"
 index = pc.Index(index_name)
 
-import chromadb
-persistent_client = chromadb.PersistentClient(path="database")
-collection = persistent_client.get_or_create_collection("arxiv_papers")
 
 if database == "Chroma (Local)":
-    vectorestore = Chroma(
-        client=persistent_client,
-        embedding_function=embedding_function)
-    fs = LocalFileStore("./database/full_docs")
-    parent_docstore = create_kv_docstore(fs)
-    retriever = ParentDocumentRetriever(
-        vectorstore=vectorestore, 
-        docstore=parent_docstore,
-        child_splitter=text_splitter,
-        search_kwargs={"k": 5}
-        )
+    st.warning("switch to cloud")
 else:
     vectorestore = PineconeVectorStore(index_name=index_name, embedding=embedding_function)
     retriever = vectorestore.as_retriever(search_kwargs={"k": top_k})    
