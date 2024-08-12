@@ -11,3 +11,4 @@ langchain-pinecone
 pinecone-notebooks
 pinecone-client
 protoc-gen-openapiv2
+protobuf==3.20.*
