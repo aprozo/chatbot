@@ -1,5 +1,6 @@
 .env
 .venv/
+.conda/
 .vscode/
 __pycache__/
 .streamlit/secrets.toml

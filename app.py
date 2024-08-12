@@ -63,7 +63,7 @@ index = pc.Index(index_name)
 if database == "Chroma (Local)":
     st.warning("switch to cloud")
 else:
-    vectorestore = PineconeVectorStore(index_name=index_name, embedding=embedding_function)
+    vectorestore = PineconeVectorStore(index_name=index_name, embedding=embedding_function, pinecone_api_key = st.secrets["pinecone_api_key"])
     retriever = vectorestore.as_retriever(search_kwargs={"k": top_k})    
 
 
