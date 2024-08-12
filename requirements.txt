@@ -17,13 +17,15 @@ certifi==2024.7.4
 chardet==5.2.0
 charset-normalizer==3.3.2
 chroma-hnswlib==0.7.6
-chromadb==0.3.29
+chromadb==0.5.5
 click==8.1.7
+clickhouse-connect==0.7.18
 coloredlogs==15.0.1
 dataclasses-json==0.6.7
 deepdiff==7.0.1
 Deprecated==1.2.14
 distro==1.9.0
+duckdb==1.0.0
 emoji==2.12.1
 fastapi==0.112.0
 feedparser==6.0.11
@@ -39,6 +41,7 @@ googleapis-common-protos==1.63.2
 greenlet==3.0.3
 grpcio==1.65.4
 h11==0.14.0
+hnswlib==0.8.0
 httpcore==1.0.5
 httptools==0.6.1
 httpx==0.27.0
@@ -67,6 +70,7 @@ langchain-text-splitters==0.2.2
 langdetect==1.0.9
 langsmith==0.1.99
 lxml==5.3.0
+lz4==4.3.3
 Markdown==3.6
 markdown-it-py==3.0.0
 MarkupSafe==2.1.5
@@ -121,10 +125,11 @@ posthog==3.5.0
 protobuf==4.25.4
 protoc-gen-openapiv2==0.0.1
 psutil==6.0.0
+pulsar-client==3.5.0
 pyarrow==17.0.0
 pyasn1==0.6.0
 pyasn1_modules==0.4.0
-pydantic==2.8.2
+pydantic==1.10.17
 pydantic_core==2.20.1
 pydeck==0.9.1
 Pygments==2.18.0
@@ -189,3 +194,4 @@ wheel==0.43.0
 wrapt==1.16.0
 yarl==1.9.4
 zipp==3.20.0
+zstandard==0.23.0
