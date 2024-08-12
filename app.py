@@ -182,7 +182,7 @@ if "messages" not in st.session_state:
 for msg in st.session_state.messages:
     st.chat_message(msg.role).write(msg.content)
 
-if prompt := st.chat_input("What is up?"):
+if prompt := st.chat_input("Ask a question, e.g. What are TPC operational principles?.."):
     st.session_state.messages.append(ChatMessage(role="user", content=prompt))
     st.chat_message("user").write(prompt)
 
