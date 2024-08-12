@@ -24,7 +24,7 @@ from dotenv import load_dotenv
 load_dotenv()
 import os
 
-
+st.set_page_config(page_title="STAR chat", page_icon=":star:")
 st.image("STAR-logo-trans.gif")
 st.title("STAR chat")
 st.write("This is a simple app to demonstrate the STAR chat system")
