@@ -55,7 +55,7 @@ if useParentDocument:
     database="Chroma (Local)"
 
 
-pc = Pinecone(api_key=os.environ.get("PINECONE_API_KEY"))
+pc = Pinecone(api_key=st.secrets["pinecone_api_key"])
 index_name = "arxiv-papers-md"
 index = pc.Index(index_name)
 
@@ -80,10 +80,11 @@ else:
     retriever = vectorestore.as_retriever(search_kwargs={"k": top_k})    
 
 
-openai_api_key=os.getenv("OPENAI_API_KEY")
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
+openai_api_key=st.secrets["openai_api_key"]
+os.environ["LANGSMITH_API_KEY"] = st.secrets["langsmith_api_key"]
+os.environ["LANGSMITH_TRACING"] = "true"
 
-llm = ChatOpenAI(model_name="gpt-4o-mini", streaming=True)
+llm = ChatOpenAI(model_name="gpt-4o-mini", streaming=True, openai_api_key=openai_api_key)
 
 system_prompt  = """
 You are an expert on the STAR experiment, a high-energy nuclear physics experiment at the Relativistic Heavy Ion Collider (RHIC) at Brookhaven National Laboratory. \

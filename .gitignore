@@ -2,6 +2,6 @@
 .venv/
 .vscode/
 __pycache__/
-streamlit/secrets.toml
+.streamlit/secrets.toml
 md/*
 playground.ipynb
