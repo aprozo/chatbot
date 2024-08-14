@@ -137,61 +137,110 @@ REMEMBER: If there is no relevant information within the context, just say "Hmm,
 not sure." or greet back. Don't try to make up an answer. Anything between the preceding 'context' \
 html blocks is retrieved from a knowledge bank, not part of the conversation with the \
 user.\
-Question: {question}
+Question: {input}
 """
-
 def format_docs(docs):
     return f"\n\n".join(f'{i+1}. ' + doc.page_content.strip("\n") 
                         + f"<ARXIV_ID> {doc.metadata['arxiv_id']} <ARXIV_ID/>" 
                         for i, doc in enumerate(docs))
 
-system_template = PromptTemplate.from_template(system_prompt)
-rag_chain_from_docs = (
-    {
-        "context": lambda input: format_docs(input["documents"]),
-        "question": itemgetter("question"),
-    }
-    | system_template
-    | llm
-    | StrOutputParser()
+llm = ChatOpenAI(model_name="gpt-4o-mini", streaming=True, openai_api_key=openai_api_key)
+
+from langchain_community.chat_message_histories import StreamlitChatMessageHistory
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+
+from langchain.chains import create_retrieval_chain
+from langchain.chains import create_history_aware_retriever
+from langchain.chains.combine_documents import create_stuff_documents_chain
+
+
+### Contextualize question ###
+contextualize_q_system_prompt = (
+    "Given a chat history and the latest user question "
+    "which might reference context in the chat history, "
+    "formulate a standalone question which can be understood "
+    "without the chat history. This question will be retrieved "
+    "using an embedding database for RAG. Do NOT answer the question, "
+    "just reformulate it if needed and otherwise return it as is."
 )
-rag_chain_with_source = RunnableMap(
-    {"documents": retriever, "question": RunnablePassthrough()}
-) | {
-    "answer": rag_chain_from_docs,
-}
+contextualize_q_prompt = ChatPromptTemplate.from_messages(
+    [
+        ("system", contextualize_q_system_prompt),
+        MessagesPlaceholder("chat_history"),
+        ("human", "{input}"),
+    ]
+)
+contextualize_q_llm = llm.with_config(tags=["contextualize_q_llm"])
+history_aware_retriever = create_history_aware_retriever(
+    contextualize_q_llm, retriever, contextualize_q_prompt
+)
+
+qa_prompt = ChatPromptTemplate.from_messages(
+    [
+        ("system", system_prompt),
+        MessagesPlaceholder("chat_history"),
+        ("human", "{input}"),
+    ]
+)
+
+from langchain_community.document_transformers import LongContextReorder
+
+# Reorder the documents:
+# Less relevant document will be at the middle of the list and more
+# relevant elements at beginning / end.
+reordering = LongContextReorder()
+
+from langchain_core.prompts import PromptTemplate
+
+# Define your custom document prompt
+
+#  document_prompt: Prompt used for formatting each document into a string. Input
+#             variables can be "page_content" or any metadata keys that are in all
+#             documents. "page_content" will automatically retrieve the
+#             `Document.page_content`, and all other inputs variables will be
+#             automatically retrieved from the `Document.metadata` dictionary. Default to
+#             a prompt that only contains `Document.page_content`.
+
+custom_document_prompt = PromptTemplate(
+    input_variables=["page_content", "title" , "arxiv_id"],  # Replace "your_variable_name" with your actual variable name
+    template="Title:{title}, <ARXIV_ID>{arxiv_id}<ARXIV_ID/>\n Text:{page_content}"  # Customize your template
+)
+
+question_answer_chain = create_stuff_documents_chain(
+                                                    llm, qa_prompt,
+                                                    document_prompt = custom_document_prompt)
+
+
+rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)
+
+
+from langchain_core.runnables.history import RunnableWithMessageHistory
+msgs = StreamlitChatMessageHistory(key="langchain_messages")
+if len(msgs.messages) == 0:
+    msgs.add_ai_message("How can I help you?")
+
+
+conversational_rag_chain = RunnableWithMessageHistory(
+    rag_chain,
+    lambda session_id: msgs,
+    input_messages_key="input",
+    history_messages_key="chat_history",
+    output_messages_key="answer",
+)
 
 
 
+# Render current messages from StreamlitChatMessageHistory
+for msg in msgs.messages:
+    st.chat_message(msg.type).write(msg.content)
+
+# If user inputs a new prompt, generate and draw a new response
+if input_question := st.chat_input("Ask a question, e.g. What are TPC operational principles?.."):
+    st.chat_message("human").write(input_question)
+    config = {"configurable": {"session_id": "any"}}
+    # Note: new messages are saved to history automatically by Langchain during run
+    with st.spinner("Retrieving information..."):
+            response = conversational_rag_chain.invoke({"input": input_question}, config)
+    st.chat_message("ai").write(response["answer"])
 
 
-
-class StreamHandler(BaseCallbackHandler):
-    def __init__(self, container, initial_text=""):
-        self.container = container
-        self.text = initial_text
-
-    def on_llm_new_token(self, token: str, **kwargs) -> None:
-        self.text += token
-        self.container.markdown(self.text)
-
-
-if "messages" not in st.session_state:
-    st.session_state["messages"] = [ChatMessage(role="assistant", content="How can I help you?")]
-
-for msg in st.session_state.messages:
-    st.chat_message(msg.role).write(msg.content)
-
-if prompt := st.chat_input("Ask a question, e.g. What are TPC operational principles?.."):
-    st.session_state.messages.append(ChatMessage(role="user", content=prompt))
-    st.chat_message("user").write(prompt)
-
-    with st.chat_message("assistant"):
-        stream_handler = StreamHandler(st.empty())
-        llm = ChatOpenAI(openai_api_key=openai_api_key, streaming=True, callbacks=[stream_handler])
-        # response = llm.invoke(st.session_state.messages)
-        with st.spinner("Retrieving information..."):
-            response_llm = rag_chain_with_source.invoke(prompt) 
-        response = response_llm["answer"]
-        st.session_state.messages.append(ChatMessage(role="assistant", content=response))
-        st.write(response)
