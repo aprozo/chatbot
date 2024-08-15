@@ -6,7 +6,6 @@ from operator import itemgetter
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 
-
 from langchain.retrievers import ParentDocumentRetriever
 from langchain_community.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 
@@ -41,7 +40,6 @@ with st.sidebar:
             disabled=True,
             horizontal=True,
         )
-    
     useParentDocument = False
     if database == "Chroma (Local)":
         useParentDocument = st.checkbox("Use Parent document retriever ( top 5 full documents are passed to LLM instead of chunks - use when a specific topic is needed in detail)", value=False)
@@ -139,11 +137,6 @@ html blocks is retrieved from a knowledge bank, not part of the conversation wit
 user.\
 Question: {input}
 """
-def format_docs(docs):
-    return f"\n\n".join(f'{i+1}. ' + doc.page_content.strip("\n") 
-                        + f"<ARXIV_ID> {doc.metadata['arxiv_id']} <ARXIV_ID/>" 
-                        for i, doc in enumerate(docs))
-
 llm = ChatOpenAI(model_name="gpt-4o-mini", streaming=True, openai_api_key=openai_api_key)
 
 from langchain_community.chat_message_histories import StreamlitChatMessageHistory
@@ -183,23 +176,7 @@ qa_prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-from langchain_community.document_transformers import LongContextReorder
-
-# Reorder the documents:
-# Less relevant document will be at the middle of the list and more
-# relevant elements at beginning / end.
-reordering = LongContextReorder()
-
 from langchain_core.prompts import PromptTemplate
-
-# Define your custom document prompt
-
-#  document_prompt: Prompt used for formatting each document into a string. Input
-#             variables can be "page_content" or any metadata keys that are in all
-#             documents. "page_content" will automatically retrieve the
-#             `Document.page_content`, and all other inputs variables will be
-#             automatically retrieved from the `Document.metadata` dictionary. Default to
-#             a prompt that only contains `Document.page_content`.
 
 custom_document_prompt = PromptTemplate(
     input_variables=["page_content", "title" , "arxiv_id"],  # Replace "your_variable_name" with your actual variable name
@@ -209,7 +186,6 @@ custom_document_prompt = PromptTemplate(
 question_answer_chain = create_stuff_documents_chain(
                                                     llm, qa_prompt,
                                                     document_prompt = custom_document_prompt)
-
 
 rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)
 
@@ -227,7 +203,6 @@ conversational_rag_chain = RunnableWithMessageHistory(
     history_messages_key="chat_history",
     output_messages_key="answer",
 )
-
 
 
 # Render current messages from StreamlitChatMessageHistory
