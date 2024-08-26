@@ -7,3 +7,4 @@ __pycache__/
 md/*
 playground.ipynb
 database/
+chainlit_app.py

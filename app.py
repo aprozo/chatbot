@@ -44,7 +44,7 @@ if useParentDocument:
     database="Chroma (Local)"
 
 pc = Pinecone(api_key=st.secrets["pinecone_api_key"])
-index_name = "arxiv-papers-md"
+index_name = "general"
 index = pc.Index(index_name)
 
 if database == "Chroma (Local)":
@@ -66,11 +66,11 @@ Refrain any other topics by saying you will not answer questions about them and 
 You are not allowed to use any other sources other than the provided search results and chat history. \
 
 Generate a comprehensive, and informative answer strictly within 200 words or less for the \
-given question based solely on the provided search results (URL and content) and chat history. You must \
+given question based solely on the provided search results (urls and content) and chat history. You must \
 only use information from the provided search results and chat history. Use an unbiased and \
 journalistic tone. Combine search results together into a coherent answer. Do not \
 repeat text. You should use bullet points in your answer for readability. Make sure to break down your answer into bullet points.\
-You should not hallicunate nor build up any references, do not use any text within <ARXIV_ID> and </ARXIV_ID> except when citing in the end.  \
+You should not hallicunate nor build up any references, do not use any text within <url> and </url> except when citing in the end.  \
 Make sure not to repeat the same context. Be specific to the exact questions. Take you time.\
 
 Here is the response template:
@@ -78,10 +78,10 @@ Here is the response template:
 # Response template 
 
 - Use bullet points to list the main points or facts that answer the query using the information within the tags <context> and <context/>.  
-- After answering, analyze the respective source links provided within <ARXIV_ID> and </ARXIV_ID> and keep only the unique links for the next step. Try to minimize the total number of unique links with no more than 10 unique links for the answer.
+- After answering, analyze the respective source links provided within <url> and </url> and keep only the unique links for the next step. Try to minimize the total number of unique links with no more than 10 unique links for the answer.
 - You will strictly use no more than 10 most unique links for the answer.
-- Use bulleted list of superscript numbers within square brackets to cite the sources for each point or fact. The numbers should correspond to the order of the sources which will be provided in the end of this reponse. Note that for every source, you must provide a URL.
-- End with a closing remark and a list of sources with their respective URLs as a bullet list explicitly with full links which are enclosed in the tag <ARXIV_ID> and </ARXIV_ID> respectively.\
+- Use bulleted list of superscript numbers within square brackets to cite the sources for each point or fact. The numbers should correspond to the order of the sources which will be provided in the end of this reponse.
+- End with a closing remark and a list of sources with their respective URLs and titles in markdown reference link style as a bullet list explicitly with full links which are enclosed in the tag <url> and </url> respectively.\
 ---
 Here is how an response would look like. Reproduce the same format for your response:
 ---
@@ -94,23 +94,23 @@ Hello, here are some key points:
 - STAR utilizes a variety of advanced detectors to measure the thousands of particles produced in these collisions, including the Time Projection Chamber (TPC), the Barrel Electromagnetic Calorimeter (BEMC), and the Muon Telescope Detector (MTD)[^3].
 - Key findings from STAR include evidence for the QGP's near-perfect fluidity, the discovery of the "chiral magnetic effect," and insights into the spin structure of protons[^4].
 
-[^1]: https://arxiv.org/abs/0704.0220v1
-[^2]: https://arxiv.org/abs/nucl-ex/0106003
-[^3]: https://arxiv.org/abs/1302.3802v3
-[^4]: https://arxiv.org/abs/nucl-ex/0603028
+[^1]: [https://arxiv.org/abs/0704.0220v1](Three Particle Correlations from STAR)
+[^2]: [https://drupal.star.bnl.gov/STAR/files/CRacz_Dissertation_v5.pdf](Description of Reaction Plane Correlated Triangular Flow in Au+Au Collisions with the STAR Detector at RHIC)
+[^3]: [https://arxiv.org/abs/1302.3802v3](Fluctuations of charge separation perpendicular to the event plane and local parity violation in sqrt(sNN)=200 GeV Au+Au collisions at RHIC)
+[^4]: [https://drupal.star.bnl.gov/STAR/files/CCNU_PhD_thesis_HuiLiu.pdf](Production of Protons and Light Nuclei in Au+Au Collisions with the STAR Detector at RHIC)
 ---
 
-Where each of the references are taken from the corresponding <ARXIV_ID> in the context. Strictly do not provide title for the references \
-Strictly do not repeat the same links. Use the numbers to cite the sources. \
+Where each of the references is taken from the corresponding <url> in the context. \
+Strictly do not repeat the same links. Use numbers to cite the sources. \
 
 If there is nothing in the context relevant to the question at hand, just say "Hmm, \
-I'm not sure." or "This is beyond the chat scope" or greet back or politely refuse to answer. Don't try to make up an answer. Write the answer in the form of markdown bullet points.\
+I'm not sure." or "This is beyond the chat scope" or greet back or politely refuse to answer. Don't try to make up an answer.\
 Make sure to highlight the most important key words in bold font. Don't repeat any context nor points in the answer.\
 
 Anything between the following `context`  html blocks is retrieved from a knowledge \
 bank. The context is numbered based on its knowledge retrival and increasing cosine similarity index. \
 Make sure to consider the order in which context appear. It is an increasing order of cosine similarity index.\
-The contents are formatted in latex, you need to remove any special characters and latex formatting before cohercing the points to build your answer.\
+The contents are formatted in latex or markdown, you need to remove any special characters and latex formatting before cohercing the points to build your answer.\
 You can use latex commands if necessary.\
 You will strictly cite no more than 10 unqiue citations at maximum from the context below.\
 Make sure these citations have to be relavant and strictly do not repeat the context in the answer.
@@ -153,12 +153,13 @@ qa_prompt = ChatPromptTemplate.from_messages(
     ]
 )
 custom_document_prompt = PromptTemplate(
-    input_variables=["page_content", "title" , "arxiv_id"],  # Replace "your_variable_name" with your actual variable name
-    template="Title:{title} \n <ARXIV_ID>{arxiv_id}<ARXIV_ID/>\n Text:{page_content}"  # Customize your template
-)
+        input_variables=["page_content", "title" , "url", "type"],  # Replace "your_variable_name" with your actual variable name
+        template="Title:{title} \n type:{type} <url>{url}<url/>\n Text:{page_content}"  # Customize your template
+    )
 question_answer_chain = create_stuff_documents_chain(
                                                     llm, qa_prompt,
-                                                    document_prompt = custom_document_prompt)
+                                                    document_prompt = custom_document_prompt
+                                                    )
 
 rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)
 msgs = StreamlitChatMessageHistory(key="langchain_messages")
