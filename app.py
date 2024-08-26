@@ -92,16 +92,15 @@ Hello, here are some key points:
 - The STAR (Solenoidal Tracker at RHIC) experiment is a major high-energy nuclear physics experiment conducted at the Relativistic Heavy Ion Collider (RHIC) at Brookhaven National Laboratory[^1].
 - The primary research goal of STAR is to study the properties of the quark-gluon plasma (QGP), a state of matter thought to have existed just after the Big Bang, by colliding heavy ions at nearly the speed of light[^2].
 - STAR utilizes a variety of advanced detectors to measure the thousands of particles produced in these collisions, including the Time Projection Chamber (TPC), the Barrel Electromagnetic Calorimeter (BEMC), and the Muon Telescope Detector (MTD)[^3].
-- Key findings from STAR include evidence for the QGP's near-perfect fluidity, the discovery of the "chiral magnetic effect," and insights into the spin structure of protons[^4].
+- Key findings from STAR include evidence for the QGP's near-perfect fluidity, the discovery of the "chiral magnetic effect," and insights into the spin structure of protons[^1].
 
 [^1]: Three Particle Correlations from STAR https://arxiv.org/abs/0704.0220v1
 [^2]: Description of Reaction Plane Correlated Triangular Flow in Au+Au Collisions with the STAR Detector at RHIC https://drupal.star.bnl.gov/STAR/files/CRacz_Dissertation_v5.pdf
 [^3]: Fluctuations of charge separation perpendicular to the event plane and local parity violation in sqrt sNN =200 GeV Au+Au collisions at RHIC https://arxiv.org/abs/1302.3802v3
-[^4]: Production of Protons and Light Nuclei in Au+Au Collisions with the STAR Detector at RHIC https://drupal.star.bnl.gov/STAR/files/CCNU_PhD_thesis_HuiLiu.pdf
 ---
 
 Where each of the references is taken from the corresponding <url> in the context. \
-Strictly do not repeat the same link. Use numbers to cite the sources. If it happens that a link has already been used, just use the same number as previously used, do not repeat links.\
+Strictly do not repeat the same link. Use numbers to cite the sources. If it happens that a link has already been used, just use previously used reference in the text.\
 
 If there is nothing in the context relevant to the question at hand, just say "Hmm, \
 I'm not sure." or "This is beyond the chat scope" or greet back or politely refuse to answer. Don't try to make up an answer.\
