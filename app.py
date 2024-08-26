@@ -81,7 +81,7 @@ Here is the response template:
 - After answering, analyze the respective source links provided within <url> and </url> and keep only the unique links for the next step. Try to minimize the total number of unique links with no more than 10 unique links for the answer.
 - You will strictly use no more than 10 most unique links for the answer.
 - Use bulleted list of superscript numbers within square brackets to cite the sources for each point or fact. The numbers should correspond to the order of the sources which will be provided in the end of this reponse.
-- End with a closing remark and a list of sources with their respective URLs and titles in markdown reference link style as a bullet list explicitly with full links which are enclosed in the tag <url> and </url> respectively.\
+- End with a closing remark and a list of sources with their respective URLs and title as a bullet list explicitly with full links which are enclosed in the tag <url> and </url> respectively.\
 ---
 Here is how an response would look like. Reproduce the same format for your response:
 ---
@@ -94,14 +94,14 @@ Hello, here are some key points:
 - STAR utilizes a variety of advanced detectors to measure the thousands of particles produced in these collisions, including the Time Projection Chamber (TPC), the Barrel Electromagnetic Calorimeter (BEMC), and the Muon Telescope Detector (MTD)[^3].
 - Key findings from STAR include evidence for the QGP's near-perfect fluidity, the discovery of the "chiral magnetic effect," and insights into the spin structure of protons[^4].
 
-[^1]: [https://arxiv.org/abs/0704.0220v1](Three Particle Correlations from STAR)
-[^2]: [https://drupal.star.bnl.gov/STAR/files/CRacz_Dissertation_v5.pdf](Description of Reaction Plane Correlated Triangular Flow in Au+Au Collisions with the STAR Detector at RHIC)
-[^3]: [https://arxiv.org/abs/1302.3802v3](Fluctuations of charge separation perpendicular to the event plane and local parity violation in sqrt(sNN)=200 GeV Au+Au collisions at RHIC)
-[^4]: [https://drupal.star.bnl.gov/STAR/files/CCNU_PhD_thesis_HuiLiu.pdf](Production of Protons and Light Nuclei in Au+Au Collisions with the STAR Detector at RHIC)
+[^1]: Three Particle Correlations from STAR https://arxiv.org/abs/0704.0220v1
+[^2]: Description of Reaction Plane Correlated Triangular Flow in Au+Au Collisions with the STAR Detector at RHIC https://drupal.star.bnl.gov/STAR/files/CRacz_Dissertation_v5.pdf
+[^3]: Fluctuations of charge separation perpendicular to the event plane and local parity violation in sqrt sNN =200 GeV Au+Au collisions at RHIC https://arxiv.org/abs/1302.3802v3
+[^4]: Production of Protons and Light Nuclei in Au+Au Collisions with the STAR Detector at RHIC https://drupal.star.bnl.gov/STAR/files/CCNU_PhD_thesis_HuiLiu.pdf
 ---
 
 Where each of the references is taken from the corresponding <url> in the context. \
-Strictly do not repeat the same links. Use numbers to cite the sources. \
+Strictly do not repeat the same link. Use numbers to cite the sources. If it happens that a link has already been used, just use the same number as previously used, do not repeat links.\
 
 If there is nothing in the context relevant to the question at hand, just say "Hmm, \
 I'm not sure." or "This is beyond the chat scope" or greet back or politely refuse to answer. Don't try to make up an answer.\
