@@ -40,14 +40,19 @@ with st.sidebar:
     else:
         top_k = st.slider("Number of chunks to retrieve", min_value=10, max_value=200,  value=100, step=5)
 
-    
+
     search_type = st.selectbox(
     'Data search type:',
     ('Everything', 'arxiv', 'theses'),
     )
-
+    
     if search_type=='Everything':
         search_type = None
+
+    filter_dict={}
+    if search_type:
+        filter_dict = {"type": search_type}
+
 
 if useParentDocument:
     database="Chroma (Local)"
@@ -62,7 +67,7 @@ else:
     vectorestore = PineconeVectorStore(index_name=index_name, embedding=embedding_function, pinecone_api_key = st.secrets["pinecone_api_key"])
     retriever = vectorestore.as_retriever(search_kwargs={
             'k': top_k,
-            'filter': {'type':  search_type}
+            'filter': filter_dict
                                         })    
 
 openai_api_key=st.secrets["openai_api_key"]
