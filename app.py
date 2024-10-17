@@ -43,7 +43,7 @@ with st.sidebar:
 
     search_type = st.selectbox(
     'Data search type:',
-    ('Everything', 'arxiv', 'theses'),
+    ('Everything', 'arxiv', 'theses', 'starnotes'),
     )
     
     if search_type=='Everything':
