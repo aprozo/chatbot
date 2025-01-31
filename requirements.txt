@@ -1,11 +1,8 @@
-langchain_openai
 langchain_pinecone
 streamlit
 langchain-chroma>=0.1.2
 langchain_openai
 langchain_huggingface
-arxiv
-unstructured[md]
 langchain_community 
 langchain-pinecone 
 pinecone-notebooks

@@ -119,8 +119,7 @@ Hello, here are some key points:
 Where each of the references is taken from the corresponding <url> in the context. \
 Strictly do not repeat the same link. Use numbers to cite the sources. If it happens that a link has already been used, just use previously used reference in the text.\
 
-If there is nothing in the context relevant to the question at hand, just say "Hmm, \
-I'm not sure." or "This is beyond the chat scope" or greet back or politely refuse to answer. Don't try to make up an answer.\
+Don't try to make up an answer.\
 Make sure to highlight the most important key words in bold font. Don't repeat any context nor points in the answer.\
 
 Anything between the following `context`  html blocks is retrieved from a knowledge \
