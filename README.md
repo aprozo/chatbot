@@ -31,3 +31,15 @@
 - [ ] Shift logs
 - [ ] Codebase + comments preprocessing
 - [ ] https://www.sdcc.bnl.gov/
+
+
+
+
+
+#### Some Data links
+https://drupal.star.bnl.gov/STAR/blogs/posts?page=0
+
+https://drupal.star.bnl.gov/STAR/juniors/educational-materials
+
+https://drupal.star.bnl.gov/STAR/blogs/jeromel
+
