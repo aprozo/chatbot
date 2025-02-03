@@ -25,6 +25,7 @@
 - [x] Mattermost
 - [ ] Mailing lists
 - [ ] https://www.star.bnl.gov
+- [ ] Indico + meetings
 - [ ] Presentations OCR
 - [ ] Pictures + comments preprocessing 
 - [ ] Shift logs
