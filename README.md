@@ -24,7 +24,7 @@
 - [x] Starnotes
 - [x] Mattermost
 - [ ] Mailing lists
-- [ ] star.bnl.gov
+- [ ] https://www.star.bnl.gov
 - [ ] Presentations OCR
 - [ ] Pictures + comments preprocessing 
 - [ ] Shift logs
