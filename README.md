@@ -7,7 +7,8 @@
   - search code
   - search papers
   - search plots
-  - search paper info : https://www.star.bnl.gov/protected/common/GPCs/gpc-committees.xml 
+  - search paper info : https://www.star.bnl.gov/protected/common/GPCs/gpc-committees.xml
+  - search authors of documents 
 - **Single-query** search (just return sources with scores)
   - Add **similarity** scores from sources 
 - Implement **feedback** from users for further improvements
