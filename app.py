@@ -170,7 +170,7 @@ qa_prompt = ChatPromptTemplate.from_messages(
 )
 custom_document_prompt = PromptTemplate(
         input_variables=["page_content","url", "type"],  # Replace "your_variable_name" with your actual variable name
-        template="type:{type} <url>{url}<url/>\n Text:{page_content}"  # Customize your template
+        template="type:{type} <url>{url}</url>\n Text:{page_content}"  # Customize your template
     )
 question_answer_chain = create_stuff_documents_chain(
                                                     llm, qa_prompt,
