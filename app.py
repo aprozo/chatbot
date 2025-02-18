@@ -139,7 +139,6 @@ REMEMBER: If there is no relevant information within the context or chat history
 not sure." or greet back. Don't try to make up an answer.\
 Question: {input}
 """
-
 ### Contextualize question ###
 contextualize_q_system_prompt = (
     "Given a chat history and the latest user question "
