@@ -18,7 +18,7 @@ load_dotenv()
 st.set_page_config(page_title="STAR chat", page_icon=":star:")
 st.image("STAR-logo-trans.gif")
 st.title("STAR chat")
-st.write("This is a simple app to demonstrate the STAR chat system")
+
 
 embedding_function = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
 text_splitter  = RecursiveCharacterTextSplitter(chunk_size=200, chunk_overlap=20)
@@ -180,7 +180,7 @@ question_answer_chain = create_stuff_documents_chain(
 rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)
 msgs = StreamlitChatMessageHistory(key="langchain_messages")
 if len(msgs.messages) == 0:
-    msgs.add_ai_message("How can I help you?")
+    msgs.add_ai_message("Hi there, you can ask any questions regarding STAR experiment and its infrastructure, any other questions will not be answered :)")
 
 conversational_rag_chain = RunnableWithMessageHistory(
     rag_chain,
