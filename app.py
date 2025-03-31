@@ -3,7 +3,8 @@ from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain_community.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from pinecone.grpc import PineconeGRPC as Pinecone
+from pinecone import Pinecone
+
 from langchain_pinecone import PineconeVectorStore
 import os
 from langchain_community.chat_message_histories import StreamlitChatMessageHistory

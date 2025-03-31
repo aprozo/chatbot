@@ -5,6 +5,5 @@ langchain_openai
 langchain_huggingface
 langchain_community 
 langchain-pinecone 
-pinecone-notebooks
-pinecone-client
+pinecone
 protoc-gen-openapiv2
