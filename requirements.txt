@@ -7,3 +7,5 @@ langchain_community
 langchain-pinecone 
 pinecone
 protoc-gen-openapiv2
+sentence-transformers 
+langchain-huggingface
