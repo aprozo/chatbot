@@ -23,10 +23,40 @@ st.title("STAR chat")
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
 
-embedding_function = HuggingFaceEmbeddings(
-    model_name="all-MiniLM-L6-v2",
-    model_kwargs={'device': 'cpu'}
-)
+# Option 1: Try explicit device initialization
+try:
+    embedding_function = HuggingFaceEmbeddings(
+        model_name="all-MiniLM-L6-v2",
+        model_kwargs={'device': 'cpu'},
+        encode_kwargs={'device': 'cpu', 'normalize_embeddings': True}
+    )
+except Exception as e:
+    st.error(f"Error initializing embeddings (Option 1): {e}")
+    
+    # Option 2: Fall back to using different initialization method
+    try:
+        import sentence_transformers
+        model = sentence_transformers.SentenceTransformer("all-MiniLM-L6-v2", device='cpu')
+        
+        embedding_function = HuggingFaceEmbeddings(
+            model=model,  # Pass pre-loaded model instead
+            model_kwargs={'device': 'cpu'}
+        )
+    except Exception as e2:
+        st.error(f"Error initializing embeddings (Option 2): {e2}")
+        
+        # Option 3: Try without device specification
+        try:
+            embedding_function = HuggingFaceEmbeddings(
+                model_name="all-MiniLM-L6-v2"
+                # No model_kwargs
+            )
+        except Exception as e3:
+            st.error(f"Error initializing embeddings (Option 3): {e3}")
+            st.stop()
+
+
+
 text_splitter  = RecursiveCharacterTextSplitter(chunk_size=200, chunk_overlap=20)
 
 with st.sidebar:
