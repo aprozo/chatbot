@@ -19,8 +19,15 @@ st.set_page_config(page_title="STAR chat", page_icon=":star:")
 st.image("STAR-logo-trans.gif")
 st.title("STAR chat")
 
+# Force CPU usage
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
+torch.set_default_device('cpu')
 
-embedding_function = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+
+embedding_function = HuggingFaceEmbeddings(
+    model_name="all-MiniLM-L6-v2",
+    model_kwargs={'device': 'cpu'}
+)
 text_splitter  = RecursiveCharacterTextSplitter(chunk_size=200, chunk_overlap=20)
 
 with st.sidebar:
