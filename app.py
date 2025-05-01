@@ -1,7 +1,7 @@
 import streamlit as st
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
-from langchain_community.embeddings.sentence_transformer import SentenceTransformerEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from pinecone import Pinecone
 
@@ -20,7 +20,7 @@ st.image("STAR-logo-trans.gif")
 st.title("STAR chat")
 
 
-embedding_function = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
+embedding_function = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 text_splitter  = RecursiveCharacterTextSplitter(chunk_size=200, chunk_overlap=20)
 
 with st.sidebar:
