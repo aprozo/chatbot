@@ -21,7 +21,6 @@ st.title("STAR chat")
 
 # Force CPU usage
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
-torch.set_default_device('cpu')
 
 
 embedding_function = HuggingFaceEmbeddings(
