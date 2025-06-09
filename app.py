@@ -7,6 +7,8 @@ from pinecone import Pinecone
 
 from langchain_pinecone import PineconeVectorStore
 import os
+os.environ["STREAMLIT_SERVER_FILE_WATCHER_TYPE"] = "none"
+
 from langchain_community.chat_message_histories import StreamlitChatMessageHistory
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.chains import create_history_aware_retriever,create_retrieval_chain
@@ -27,8 +29,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = ""
 try:
     embedding_function = HuggingFaceEmbeddings(
         model_name="all-MiniLM-L6-v2",
-        model_kwargs={'device': 'cpu'},
-        encode_kwargs={'device': 'cpu', 'normalize_embeddings': True}
+        model_kwargs={'device': 'cpu'}
     )
 except Exception as e:
     st.error(f"Error initializing embeddings (Option 1): {e}")
@@ -94,9 +95,13 @@ with st.sidebar:
 if useParentDocument:
     database="Chroma (Local)"
 
-pc = Pinecone(api_key=st.secrets["pinecone_api_key"])
-index_name = "general"
-index = pc.Index(index_name)
+try:
+    pc = Pinecone(api_key=st.secrets["pinecone_api_key"])
+    index = pc.Index(index_name)
+except Exception as e:
+    st.error(f"Failed to initialize Pinecone index: {e}")
+    st.stop()
+
  
 if database == "Chroma (Local)":
     st.warning("switch to cloud")
