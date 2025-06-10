@@ -79,9 +79,9 @@ with st.sidebar:
 
 if useParentDocument:
     database="Chroma (Local)"
-
+    
+index_name="general"
 try:
-    index_name="general"
     pc = Pinecone(api_key=st.secrets["pinecone_api_key"])
     index = pc.Index(index_name)
 except Exception as e:
