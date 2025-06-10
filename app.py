@@ -1,20 +1,32 @@
 import streamlit as st
+import os
+
+# CRITICAL: Set environment variables BEFORE importing any ML libraries
+os.environ["STREAMLIT_SERVER_FILE_WATCHER_TYPE"] = "none"
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
+
+# Import torch early and set to CPU mode
+try:
+    import torch
+    torch.set_num_threads(1)
+    if torch.cuda.is_available():
+        torch.cuda.set_device(-1)  # Disable CUDA
+except ImportError:
+    pass
+
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from pinecone import Pinecone
-
 from langchain_pinecone import PineconeVectorStore
-import os
-os.environ["STREAMLIT_SERVER_FILE_WATCHER_TYPE"] = "none"
-
 from langchain_community.chat_message_histories import StreamlitChatMessageHistory
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain.chains import create_history_aware_retriever,create_retrieval_chain
+from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from dotenv import load_dotenv
+
 load_dotenv()
 
 st.set_page_config(page_title="STAR chat", page_icon=":star:")
@@ -24,40 +36,13 @@ st.title("STAR chat")
 # Force CPU usage
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
-
-# Option 1: Try explicit device initialization
-try:
-    embedding_function = HuggingFaceEmbeddings(
-        model_name="all-MiniLM-L6-v2",
-        model_kwargs={'device': 'cpu'}
-    )
-except Exception as e:
-    st.error(f"Error initializing embeddings (Option 1): {e}")
-    
-    # Option 2: Fall back to using different initialization method
-    try:
-        import sentence_transformers
-        model = sentence_transformers.SentenceTransformer("all-MiniLM-L6-v2", device='cpu')
-        
-        embedding_function = HuggingFaceEmbeddings(
-            model=model,  # Pass pre-loaded model instead
-            model_kwargs={'device': 'cpu'}
-        )
-    except Exception as e2:
-        st.error(f"Error initializing embeddings (Option 2): {e2}")
-        
-        # Option 3: Try without device specification
-        try:
-            embedding_function = HuggingFaceEmbeddings(
-                model_name="all-MiniLM-L6-v2"
-                # No model_kwargs
-            )
-        except Exception as e3:
-            st.error(f"Error initializing embeddings (Option 3): {e3}")
-            st.stop()
+@st.cache_resource
+def get_embedding_function():
+    embedding_function = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    return embedding_function
 
 
-
+embedding_function = get_embedding_function()
 text_splitter  = RecursiveCharacterTextSplitter(chunk_size=200, chunk_overlap=20)
 
 with st.sidebar:
