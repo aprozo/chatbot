@@ -1,3 +1,7 @@
+[server]
+fileWatcherType = "none"
+
+
 [theme] # You have to add this line
 
 primaryColor="#F63366"
