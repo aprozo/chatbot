@@ -87,7 +87,9 @@ except Exception as e:
     st.error(f"Failed to initialize Pinecone index: {e}")
     st.stop()
 
- 
+
+index_name="general"
+
 if database == "Chroma (Local)":
     st.warning("switch to cloud")
 else:
