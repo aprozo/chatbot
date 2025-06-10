@@ -1,5 +1,3 @@
-torch==2.0.0+cpu
-torchvision==0.15.0+cpu
 langchain_pinecone
 streamlit
 langchain-chroma>=0.1.2
