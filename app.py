@@ -81,6 +81,7 @@ if useParentDocument:
     database="Chroma (Local)"
 
 try:
+    index_name="general"
     pc = Pinecone(api_key=st.secrets["pinecone_api_key"])
     index = pc.Index(index_name)
 except Exception as e:
@@ -88,7 +89,6 @@ except Exception as e:
     st.stop()
 
 
-index_name="general"
 
 if database == "Chroma (Local)":
     st.warning("switch to cloud")
