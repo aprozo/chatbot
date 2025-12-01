@@ -1,6 +1,5 @@
-langchain_pinecone
+langchain==0.3.14
 streamlit
-langchain-chroma>=0.1.2
 langchain_openai
 langchain_huggingface
 langchain_community 
