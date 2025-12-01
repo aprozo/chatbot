@@ -36,13 +36,8 @@ st.title("STAR chat")
 # Force CPU usage
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
-@st.cache_resource
-def get_embedding_function():
-    embedding_function = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-    return embedding_function
 
-
-embedding_function = get_embedding_function()
+embedding_function = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 text_splitter  = RecursiveCharacterTextSplitter(chunk_size=200, chunk_overlap=20)
 
 with st.sidebar:
