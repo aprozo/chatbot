@@ -1,10 +1,16 @@
-langchain==0.3.14
 streamlit
-langchain_openai
-langchain_huggingface
-langchain_community 
-langchain-pinecone 
-pinecone
-protoc-gen-openapiv2
-sentence-transformers 
+
+# LangChain core
+langchain==0.3.14
+langchain-openai
 langchain-huggingface
+langchain-pinecone
+langchain-text-splitters
+langchain-community
+
+# Vector DB
+pinecone
+
+# Other
+python-dotenv
+torch
