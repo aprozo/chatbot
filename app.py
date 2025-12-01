@@ -15,9 +15,9 @@ except ImportError:
     pass
 
 from langchain_openai import ChatOpenAI
-from langchain.prompts import PromptTemplate
+from langchain_core.prompts import PromptTemplate
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from pinecone import Pinecone
 from langchain_pinecone import PineconeVectorStore
 from langchain_community.chat_message_histories import StreamlitChatMessageHistory
