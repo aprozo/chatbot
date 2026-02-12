@@ -9,7 +9,7 @@ langchain-text-splitters
 langchain-community
 
 # Vector DB
-pinecone
+pinecone < 6
 
 # Other
 python-dotenv
